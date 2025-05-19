@@ -1,0 +1,47 @@
+#version: "3"
+
+services:
+  n8n:
+    image: n8nio/n8n
+    ports:
+      - "${N8N_PORT}:${N8N_PORT}"
+    env_file:
+      - .env
+      - .env.local
+    environment:
+      - GENERIC_TIMEZONE=${GENERIC_TIMEZONE}
+      - N8N_HOST=${N8N_HOST}
+      - N8N_PORT=${N8N_PORT}
+      - N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS=true
+      - N8N_RUNNERS_ENABLED=true
+      - WEBHOOK_URL=${WEBHOOK_URL}
+    volumes:
+      - ./n8n_data:/home/node/.n8n
+    networks:
+      - internal_n8n
+    depends_on:
+      - mongodb
+      - redis
+
+  redis:
+    image: redis:alpine
+    ports:
+      - "${PORT_REDIS}:${PORT_REDIS}"
+    networks:
+      - internal_n8n
+
+  mongodb:
+    image: mongo:latest
+    ports:
+      - "${PORT_MONGODB}:${PORT_MONGODB}"
+    volumes:
+      - ./mongo_data:/data/db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD}
+    networks:
+      - internal_n8n
+
+networks:
+  internal_n8n:
+    driver: bridge

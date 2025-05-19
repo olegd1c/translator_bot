@@ -1,0 +1,17 @@
+# n8n system files
+n8n_data/
+.n8n/
+!.n8n/docker-compose.yml  # якщо ти хочеш трекати конфіг
+
+# Virtualenv
+venv/
+.env.local
+*.log
+
+# dependencies
+**/node_modules
+
+# VSCode & OS files
+.vscode/
+.DS_Store
+Thumbs.db
