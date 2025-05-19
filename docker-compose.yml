@@ -19,28 +19,6 @@ services:
       - ./n8n_data:/home/node/.n8n
     networks:
       - internal_n8n
-    depends_on:
-      - mongodb
-      - redis
-
-  redis:
-    image: redis:alpine
-    ports:
-      - "${PORT_REDIS}:${PORT_REDIS}"
-    networks:
-      - internal_n8n
-
-  mongodb:
-    image: mongo:latest
-    ports:
-      - "${PORT_MONGODB}:${PORT_MONGODB}"
-    volumes:
-      - ./mongo_data:/data/db
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: ${MONGO_USERNAME}
-      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD}
-    networks:
-      - internal_n8n
 
 networks:
   internal_n8n:
